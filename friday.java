@@ -3,7 +3,7 @@
 /*
 ID: ddeng071
 LANG: JAVA
-TASK: gift1
+TASK: friday
 */
 
 import java.io.BufferedReader;
@@ -14,11 +14,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
-public class gift1 {
+public class friday {
     static class Kattio extends PrintWriter {
         private BufferedReader r;
         private StringTokenizer st;
@@ -51,36 +49,45 @@ public class gift1 {
     }
 
     public static void main(String[] args) throws IOException {
-        Kattio in = new Kattio("gift1");
-        HashMap<String, Integer> hm = new LinkedHashMap<String, Integer>();
-        int members = in.nextInt();
+        Kattio in = new Kattio("friday");
+        int years = in.nextInt();
 
-        for (int i = 0; i < members; i++) {
-            hm.put(in.next(), 0);
-        }
+        int[] occurences = new int[7];
 
-        String giver;
-        int amt;
-        int receivers;
-        String receiver;
-        for (int i = 0; i < members; i++) {
-            giver = in.next();
-            amt = in.nextInt();
-            receivers = in.nextInt();
-
-            if (receivers != 0) {
-                hm.replace(giver, hm.get(giver) - amt + amt % receivers);
-
-                for (int j = 0; j < receivers; j++) {
-                    receiver = in.next();
-                    hm.replace(receiver, hm.get(receiver) + amt / receivers);
+        int startDay = 1;
+        for (int i = 1900; i < 1900 + years; i++) {
+            for (int j = 1; j <= 12; j++) {
+                occurences[(startDay + 12) % 7]++;
+                if (j == 1 || j == 3 || j == 5 || j == 7 || j == 8 || j == 10 || j == 12) {
+                    startDay += 31;
+                }
+                else if (j == 4 || j == 6 || j == 9 || j == 11) {
+                    startDay += 30;
+                }
+                else if (j == 2 && isLeapYear(i)) {
+                    startDay += 29;
+                }
+                else {
+                    startDay += 28;
                 }
             }
+            startDay %= 7;
+        }
+        
+        int[] shifted = new int[occurences.length];
+        shifted[0] = occurences[occurences.length - 1];
+        for (int i = 0; i < occurences.length - 1; i++) {
+            shifted[i + 1] = occurences[i];
         }
 
-        hm.entrySet().forEach(entry -> {
-            in.println(entry.getKey() + " " + entry.getValue());
-        });
+        for (int i = 0; i < shifted.length - 1; i++) {
+            in.print(shifted[i] + " ");
+        }
+        in.print(shifted[shifted.length - 1] + "\n");
         in.close();
+    }
+
+    static boolean isLeapYear(int years) {
+        return years % 4 == 0 && years % 100 == 0 && years % 400 == 0 || years % 4 == 0 && !(years % 100 == 0);
     }
 }
