@@ -1,6 +1,5 @@
 ## USACO Practice
----
-
+\
 This repository is split into three sections:
 
 [Class](#) is just a compilation of solved past competitive programming problems for classes.
